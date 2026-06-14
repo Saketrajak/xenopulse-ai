@@ -12,6 +12,7 @@ from routes.campaigns import router as campaign_router
 from routes.audience import router as audience_router
 from routes.launch import router as launch_router
 from routes.communications import router as communications_router
+from routes.agent import router as agent_router
 app = FastAPI(
     title="XenoPulse AI"
 )
@@ -23,6 +24,7 @@ app.include_router(campaign_router)
 app.include_router(audience_router)
 app.include_router(launch_router)
 app.include_router(communications_router)
+app.include_router(agent_router)
 @app.get("/")
 def root():
     return {

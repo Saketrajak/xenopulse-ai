@@ -13,6 +13,16 @@ model = genai.GenerativeModel(
     "gemini-2.5-flash"
 )
 
+
+def generate_content(prompt):
+
+    response = model.generate_content(
+        prompt
+    )
+
+    return response.text
+
+
 def generate_campaign(goal):
 
     prompt = f"""
@@ -32,6 +42,6 @@ def generate_campaign(goal):
     }}
     """
 
-    response = model.generate_content(prompt)
-
-    return response.text
+    return generate_content(
+        prompt
+    )
