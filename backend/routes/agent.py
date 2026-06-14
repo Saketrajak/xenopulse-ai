@@ -59,6 +59,12 @@ def chat(request: ChatRequest):
         or "churn" in message
         or "lost" in message
         or "back" in message
+        or "campaign" in message
+        or "launch" in message
+        or "start" in message
+        or "run" in message
+        or "customer" in message
+        or "sale" in message
     ):
 
         return {

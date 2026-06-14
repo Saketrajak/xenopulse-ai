@@ -34,13 +34,19 @@ export default function ChatWindow({
   isThinking,
   setIsThinking,
 }: ChatWindowProps) {
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customText, setCustomText] = useState("");
 
   // Auto-scroll to bottom of conversation
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [messages, isThinking]);
 
   // Handle user inputs via prompt input
@@ -309,7 +315,7 @@ export default function ChatWindow({
   return (
     <div className="flex flex-1 flex-col bg-slate-50 min-h-0 relative">
       {/* Scrollable Chat Area */}
-      <div className="flex-1 overflow-y-auto">
+      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
         <div className="max-w-5xl mx-auto p-10">
           {/* Hero Header */}
           {messages.length === 1 && (
@@ -475,8 +481,6 @@ export default function ChatWindow({
                 <span className="text-xs text-slate-400 font-medium">Xeno AI is planning...</span>
               </div>
             )}
-
-            <div ref={messagesEndRef} />
           </div>
         </div>
       </div>
