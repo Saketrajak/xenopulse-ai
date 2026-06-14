@@ -32,8 +32,10 @@ def chat(request: ChatRequest):
     message = request.message.lower()
 
     if (
-        "repeat purchase" in message
+        "repeat" in message
         or "retention" in message
+        or "returning" in message
+        or "loyalty" in message
     ):
 
         return {
@@ -50,6 +52,13 @@ def chat(request: ChatRequest):
     elif (
         "inactive" in message
         or "winback" in message
+        or "win-back" in message
+        or "buy back" in message
+        or "buy-back" in message
+        or "dormant" in message
+        or "churn" in message
+        or "lost" in message
+        or "back" in message
     ):
 
         return {
