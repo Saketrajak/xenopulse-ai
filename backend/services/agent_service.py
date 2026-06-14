@@ -451,9 +451,14 @@ Generate:
 Keep it concise.
 """
 
-    ai_summary = generate_content(
-        summary_prompt
-    )
+    global CAMPAIGN_SUMMARIES
+
+    if campaign_id in CAMPAIGN_SUMMARIES:
+        ai_summary = CAMPAIGN_SUMMARIES[campaign_id]
+    else:
+        ai_summary = generate_content(summary_prompt)
+        if "AI Generation Error" not in ai_summary:
+            CAMPAIGN_SUMMARIES[campaign_id] = ai_summary
 
     delivery_rate = metrics[
         "delivery_rate"
