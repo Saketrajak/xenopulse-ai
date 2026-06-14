@@ -3,13 +3,14 @@ import { useState } from "react";
 interface PromptInputProps {
     onSend: (message: string) => void;
     disabled?: boolean;
+    isClosed?: boolean;
 }
 
-export default function PromptInput({ onSend, disabled }: PromptInputProps) {
+export default function PromptInput({ onSend, disabled, isClosed }: PromptInputProps) {
     const [input, setInput] = useState("");
 
     const handleSend = () => {
-        if (!input.trim() || disabled) return;
+        if (!input.trim() || disabled || isClosed) return;
         onSend(input);
         setInput("");
     };
@@ -20,24 +21,30 @@ export default function PromptInput({ onSend, disabled }: PromptInputProps) {
         }
     };
 
+    const placeholderText = isClosed
+        ? "Workspace closed — campaign disapproved"
+        : disabled
+        ? "AI is thinking..."
+        : "Ask XenoPulse anything...";
+
     return (
         <div className="sticky bottom-0 border-t border-slate-200 bg-white/90 backdrop-blur-md p-5">
             <div className="max-w-5xl mx-auto">
-                <div className="flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-5 py-3 shadow-sm">
+                <div className="flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-5 py-3 shadow-sm bg-slate-50/50">
 
                     <input
-                        placeholder={disabled ? "AI is thinking..." : "Ask XenoPulse anything..."}
+                        placeholder={placeholderText}
                         className="flex-1 bg-transparent outline-none text-slate-700 placeholder:text-slate-400 disabled:opacity-50"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        disabled={disabled}
+                        disabled={disabled || isClosed}
                     />
 
                     <button
                         onClick={handleSend}
-                        disabled={disabled || !input.trim()}
-                        className="rounded-2xl bg-blue-600 px-5 py-2 text-white font-medium transition hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed"
+                        disabled={disabled || isClosed || !input.trim()}
+                        className="rounded-2xl bg-blue-600 px-5 py-2 text-white font-medium transition hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed cursor-pointer"
                     >
                         Send
                     </button>

@@ -24,6 +24,8 @@ interface ChatWindowProps {
   setAiContext: Dispatch<SetStateAction<AIContext>>;
   isThinking: boolean;
   setIsThinking: Dispatch<SetStateAction<boolean>>;
+  isClosed: boolean;
+  setIsClosed: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function ChatWindow({
@@ -33,6 +35,8 @@ export default function ChatWindow({
   setAiContext,
   isThinking,
   setIsThinking,
+  isClosed,
+  setIsClosed,
 }: ChatWindowProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showCustomInput, setShowCustomInput] = useState(false);
@@ -312,6 +316,23 @@ export default function ChatWindow({
     }
   };
 
+  const handleDisapproveCampaign = () => {
+    setAiContext((prev) => ({
+      ...prev,
+      campaign: "Disapproved",
+      results: "Stopped",
+    }));
+    setIsClosed(true);
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `disapproved-${Date.now()}`,
+        role: "assistant",
+        text: "Workspace closed — the campaign copy has been disapproved. You can refresh the page to start a new campaign stream.",
+      },
+    ]);
+  };
+
   return (
     <div className="flex flex-1 flex-col bg-slate-50 min-h-0 relative">
       {/* Scrollable Chat Area */}
@@ -377,6 +398,7 @@ export default function ChatWindow({
                     key={message.id}
                     data={message.cardData}
                     onLaunch={handleLaunchCampaign}
+                    onDisapprove={handleDisapproveCampaign}
                   />
                 );
               }
@@ -486,7 +508,7 @@ export default function ChatWindow({
       </div>
 
       {/* Input box */}
-      <PromptInput onSend={handleSendMessage} disabled={isThinking} />
+      <PromptInput onSend={handleSendMessage} disabled={isThinking} isClosed={isClosed} />
     </div>
   );
 }

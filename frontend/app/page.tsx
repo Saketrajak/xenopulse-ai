@@ -34,6 +34,7 @@ export default function Home() {
   });
 
   const [isThinking, setIsThinking] = useState(false);
+  const [isClosed, setIsClosed] = useState(false);
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 font-sans antialiased text-slate-800">
@@ -54,6 +55,8 @@ export default function Home() {
             setAiContext={setAiContext}
             isThinking={isThinking}
             setIsThinking={setIsThinking}
+            isClosed={isClosed}
+            setIsClosed={setIsClosed}
           />
           <SummaryPanel aiContext={aiContext} />
         </div>
