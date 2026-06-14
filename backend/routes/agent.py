@@ -3,22 +3,38 @@ from pydantic import BaseModel
 
 from services.agent_service import (
     analyze_demo_data,
-    generate_campaign_draft
+    generate_campaign_draft,
+    approve_campaign,
+    generate_campaign_summary,
+    save_custom_campaign
 )
 
 router = APIRouter()
+
 
 
 class ChatRequest(BaseModel):
     message: str
 
 
+class CampaignSummaryRequest(BaseModel):
+    campaign_id: int
+
+class CustomCampaignRequest(
+    BaseModel
+):
+
+    message: str
+
 @router.post("/agent/chat")
 def chat(request: ChatRequest):
 
     message = request.message.lower()
 
-    if "repeat purchase" in message:
+    if (
+        "repeat purchase" in message
+        or "retention" in message
+    ):
 
         return {
             "goal": "RETENTION",
@@ -31,13 +47,16 @@ def chat(request: ChatRequest):
             ]
         }
 
-    elif "inactive" in message:
+    elif (
+        "inactive" in message
+        or "winback" in message
+    ):
 
         return {
             "goal": "WINBACK",
             "agent_state": "NEEDS_DATA",
             "message":
-                "I found a win-back use case. Would you like to upload customer data or use demo data?",
+                "I found a win-back opportunity. Would you like to upload customer data or use demo data?",
             "actions": [
                 "UPLOAD_DATA",
                 "USE_DEMO_DATA"
@@ -45,10 +64,14 @@ def chat(request: ChatRequest):
         }
 
     return {
+
         "goal": "UNKNOWN",
-        "agent_state": "NEEDS_CLARIFICATION",
+
+        "agent_state":
+            "NEEDS_CLARIFICATION",
+
         "message":
-            "Can you tell me more about the business problem?"
+            "Can you tell me more about the business problem you are trying to solve?"
     }
 
 
@@ -64,3 +87,31 @@ def use_demo():
 def generate_campaign():
 
     return generate_campaign_draft()
+
+
+@router.post("/agent/approve-campaign")
+def approve():
+
+    return approve_campaign()
+
+
+@router.post("/agent/campaign-summary")
+def campaign_summary(
+    request: CampaignSummaryRequest
+):
+
+    return generate_campaign_summary(
+        request.campaign_id
+    )
+
+@router.post(
+    "/agent/custom-campaign"
+)
+
+def custom_campaign(
+    request: CustomCampaignRequest
+):
+
+    return save_custom_campaign(
+        request.message
+    )

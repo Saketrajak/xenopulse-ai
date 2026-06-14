@@ -16,31 +16,37 @@ model = genai.GenerativeModel(
 
 def generate_content(prompt):
 
-    response = model.generate_content(
-        prompt
-    )
+    try:
 
-    return response.text
+        response = model.generate_content(
+            prompt
+        )
+
+        return response.text
+
+    except Exception as e:
+
+        return f"AI Generation Error: {str(e)}"
 
 
 def generate_campaign(goal):
 
     prompt = f"""
-    You are a CRM strategist.
+You are a CRM strategist.
 
-    Business Goal:
-    {goal}
+Business Goal:
+{goal}
 
-    Return JSON only.
+Return JSON only.
 
-    {{
-      "audience_reason":"",
-      "recommended_channel":"",
-      "predicted_open_rate":"",
-      "predicted_conversion_rate":"",
-      "message":""
-    }}
-    """
+{{
+  "audience_reason": "",
+  "recommended_channel": "",
+  "predicted_open_rate": "",
+  "predicted_conversion_rate": "",
+  "message": ""
+}}
+"""
 
     return generate_content(
         prompt
