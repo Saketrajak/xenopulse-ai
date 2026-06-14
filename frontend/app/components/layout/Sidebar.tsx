@@ -4,7 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Sparkles, Megaphone, BarChart3 } from "lucide-react";
 
-export default function Sidebar() {
+import { AIContext } from "../../page";
+
+interface SidebarProps {
+    aiContext: AIContext;
+}
+
+export default function Sidebar({ aiContext }: SidebarProps) {
     return (
         <aside className="w-80 border-r border-slate-200 bg-white/80 backdrop-blur-xl flex flex-col">
             {/* Logo */}
@@ -66,8 +72,8 @@ export default function Sidebar() {
                                 🎯 Goal
                             </p>
 
-                            <p className="text-sm text-slate-500">
-                                Bring back inactive customers
+                            <p className="text-sm text-slate-500 capitalize">
+                                {aiContext.goal}
                             </p>
                         </div>
 
@@ -77,7 +83,7 @@ export default function Sidebar() {
                             </p>
 
                             <p className="text-sm text-slate-500">
-                                2,431 dormant customers identified
+                                {aiContext.insight}
                             </p>
                         </div>
 
@@ -86,8 +92,8 @@ export default function Sidebar() {
                                 ✨ Strategy
                             </p>
 
-                            <p className="text-sm text-slate-500">
-                                WhatsApp re-engagement campaign
+                            <p className="text-sm text-slate-500 capitalize">
+                                {aiContext.strategy}
                             </p>
                         </div>
 
@@ -96,8 +102,8 @@ export default function Sidebar() {
                                 💬 Campaign
                             </p>
 
-                            <p className="text-sm text-slate-500">
-                                Draft ready for review
+                            <p className="text-sm text-slate-500 capitalize">
+                                {aiContext.campaign}
                             </p>
                         </div>
                     </div>
@@ -116,7 +122,7 @@ export default function Sidebar() {
                     </div>
 
                     <p className="mt-2 text-xs text-slate-500">
-                        GPT Strategy Engine Active
+                        Gemini 2.5 Flash Engine Active
                     </p>
                 </div>
             </div>
